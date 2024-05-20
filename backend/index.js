@@ -13,6 +13,9 @@ mongoose
 
 app.use("/", require("./routes/authRoutes"));
 
+//middleware
+app.use(express.json());
+
 app.listen(port, () => {
   console.log(`example app listening on ${port}`);
 });
