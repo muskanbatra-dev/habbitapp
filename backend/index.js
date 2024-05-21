@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const { mongoose } = require("mongoose");
+const cookieParser = require("cookie-parser");
 require("dotenv").config({ path: ".env" });
 const port = 3000;
 // database connection
@@ -10,6 +11,9 @@ mongoose
   .then(() => console.log("db connected"))
   .catch((err) => console.log("database not connected", err));
 
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
     origin: "*", // use your actual domain name (or localhost), using * is not recommended
@@ -27,7 +31,6 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
 app.use("/", require("./routes/authRoutes"));
 
 app.listen(port, () => {

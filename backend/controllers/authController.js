@@ -1,13 +1,11 @@
 const User = require("../models/user");
-
-const test = (req, res) => {
-  res.json("test is working");
-};
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 //register endpoint
-
+const test = (req, res) => {
+  res.json("test is working");
+};
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -70,7 +68,7 @@ const loginUser = async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token);
+          res.cookie("token", token).json(user);
         }
       );
     }
