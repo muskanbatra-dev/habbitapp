@@ -29,8 +29,9 @@ const Login = () => {
       }
       else{
         setData({})
-        toast.success('Login Sucessful, Welcome!')
         navigate('/')
+        toast.success('Login Sucessful, Welcome!')
+        
       }
     } catch (error) {
       toast.error
