@@ -1,8 +1,12 @@
 const User = require("../models/user");
-const { hashPassword, comparePassword } = require("../helpers/auth");
+
 const test = (req, res) => {
   res.json("test is working");
 };
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+//register endpoint
 
 const registerUser = async (req, res) => {
   try {
@@ -26,12 +30,14 @@ const registerUser = async (req, res) => {
         error: "Email is already ",
       });
     }
-    const hashedPassword = await hashPassword(password);
+    let salt = bcrypt.genSaltSync(saltRounds);
+    let hashPassword = bcrypt.hashSync(password, salt);
+    console.log(hashPassword, "hashed");
     //create user
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password: hashPassword,
     });
 
     return res.json(user);
@@ -39,7 +45,47 @@ const registerUser = async (req, res) => {
     console.log(error);
   }
 };
+// login endpoint
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    //check if user exists
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.json({
+        error: "No User Found",
+      });
+    }
+
+    //check if passwords match
+    console.log(password, user.password);
+    const match = bcrypt.compareSync(password, user.password);
+
+    if (match) {
+      res.json("passwords match");
+      jwt.sign(
+        { email: user.email, id: user._id, name: user.name },
+        process.env.JWT_SECRET,
+        {},
+        (err, token) => {
+          if (err) throw err;
+          res.cookie("token", token);
+        }
+      );
+    }
+
+    if (!match) {
+      res.json({
+        error: "Passwords do not match",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   test,
   registerUser,
+  loginUser,
 };

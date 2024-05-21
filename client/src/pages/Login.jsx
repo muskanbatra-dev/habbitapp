@@ -1,15 +1,32 @@
 import React from 'react'
 import { useState } from 'react'
 import axios from 'axios'
+import { toast } from 'react-hot-toast'
 
 const Login = () => {
   const [data,setData]= useState({
     email: "",
     password: "",
   })
-  const loginUser = (e)=>{
+  const loginUser = async(e)=>{
     e.preventDefault()
-    axios.get('/')
+    const {email , password} = data
+    try {
+      const {data} = await axios.post(' http://localhost:3000/login',{
+        email,
+        password
+      })
+      if(data.error){
+        toast.error(data.error)
+      }
+      else{
+        setData({})
+        toast.success('Login Sucessful, Welcome!')
+        navigate('/')
+      }
+    } catch (error) {
+      toast.error
+    }
   }
   return (
     <div>
