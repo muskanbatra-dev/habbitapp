@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const { Schema, Model } = mongoose;
 
-const goalSchema = new Schema({
+const goalSchema =  Schema({
+  user:{
+    type:mongoose.Schema.ObjectId,
+    ref:"user"},
+ 
   title: {
     type: String,
     required: true,
@@ -11,13 +15,20 @@ const goalSchema = new Schema({
     required: true,
   },
   min_timeline: {
-    type: Number,
+    type: Date,
     required: true,
   },
   max_timeline: {
-    type: Number,
+    type: Date,
     required: true,
   },
+},{
+  timestamps:true
 });
+
+const goalmodel =Model(goalSchema)
+module.exports = goalmodel
+
+
 
 

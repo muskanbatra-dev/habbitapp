@@ -12,18 +12,13 @@ const Login = () => {
     e.preventDefault()
     const {email , password} = data
     try {
-      const header = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+     
       const {data} = await axios.post(' http://localhost:3000/login',{
         email,
         password
-      },{
-        credentials: "include",
-        header
-      },)
+      })
+
+      console.log(data)
       if(data.error){
         toast.error(data.error)
       }

@@ -68,7 +68,16 @@ const loginUser = async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token).json(user);
+          console.log(token, "token");
+          res
+            .cookie("token", token, {
+              expires: new Date(Date.now() + 3600000 * 24 * 60 * 60 * 1000),
+              httpOnly: true,
+              path: "/",
+              sameSite: "None", // Only use with HTTPS
+              secure: true, // Only use with HTTPS
+            })
+            .json(user);
         }
       );
     }
@@ -82,6 +91,8 @@ const loginUser = async (req, res) => {
     console.log(error);
   }
 };
+
+
 module.exports = {
   test,
   registerUser,

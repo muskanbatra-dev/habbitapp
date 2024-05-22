@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: "*", // use your actual domain name (or localhost), using * is not recommended
+    origin: " http://localhost:5173", // use your actual domain name (or localhost), using * is not recommended
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
