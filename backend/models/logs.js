@@ -1,27 +1,25 @@
 const mongoose = require("mongoose");
+
 const { Schema, model } = mongoose;
 
-const goalSchema = Schema(
+const logSchema = Schema(
   {
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "user",
     },
-
-    title: {
+    model: {
       type: String,
       required: true,
+      enum: ["GOAL", "TASK"],
     },
-    description: {
+    action: {
       type: String,
       required: true,
+      enum: ["CREATE", "UPDATE", "DELETE"],
     },
-    min_timeline: {
-      type: Date,
-      required: true,
-    },
-    max_timeline: {
-      type: Date,
+    logs: {
+      type: Object,
       required: true,
     },
   },
@@ -30,5 +28,6 @@ const goalSchema = Schema(
   }
 );
 
-const goalmodel = model("goal", goalSchema);
-module.exports = goalmodel;
+const logsmodel = model("logs", logSchema);
+
+module.exports = logsmodel;
