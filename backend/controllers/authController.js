@@ -57,27 +57,19 @@ const loginUser = async (req, res) => {
     }
 
     //check if passwords match
-    console.log(password, user.password);
     const match = bcrypt.compareSync(password, user.password);
 
     if (match) {
-      res.json("passwords match");
       jwt.sign(
         { email: user.email, id: user._id, name: user.name },
         process.env.JWT_SECRET,
         {},
         (err, token) => {
           if (err) throw err;
-          console.log(token, "token");
-          res
-            .cookie("token", token, {
-              expires: new Date(Date.now() + 3600000 * 24 * 60 * 60 * 1000),
-              httpOnly: true,
-              path: "/",
-              sameSite: "None", // Only use with HTTPS
-              secure: true, // Only use with HTTPS
-            })
-            .json(user);
+          const tokenObj = { token: token };
+          const userobj = { ...user, ...tokenObj };
+          console.log(res.status(200).json(userobj));
+          return res.status(200).json(userobj);
         }
       );
     }
