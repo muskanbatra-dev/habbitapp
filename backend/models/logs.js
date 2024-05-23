@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const { Schema, model } = mongoose;
-
-const logSchema = Schema(
+const LogsSchema = Schema(
   {
     user: {
       type: mongoose.Schema.ObjectId,
@@ -28,6 +27,6 @@ const logSchema = Schema(
   }
 );
 
-const logsmodel = model("logs", logSchema);
+const Logsmodel = mongoose.model("Logs", LogsSchema);
 
-module.exports = logsmodel;
+module.exports = Logsmodel;

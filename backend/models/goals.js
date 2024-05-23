@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
+const { Schema } = mongoose;
 
-const goalSchema = Schema(
+const goalsSchema = Schema(
   {
     user: {
       type: mongoose.Schema.ObjectId,
@@ -30,5 +30,6 @@ const goalSchema = Schema(
   }
 );
 
-const goalmodel = model("goal", goalSchema);
-module.exports = goalmodel;
+const GoalsModel = mongoose.model("Goals", goalsSchema);
+
+module.exports = GoalsModel;

@@ -1,6 +1,6 @@
-const goalmodel = require("../models/goals");
+const Goals = require("../models/goals");
 const { ObjectId } = require("mongodb");
-const logsmodel = require("../models/logs");
+const Logs = require("../models/logs");
 
 const GetGoals = async (req, res) => {
   try {
@@ -10,14 +10,12 @@ const GetGoals = async (req, res) => {
         message: "UserId is Required",
       });
 
-    const Goals = await goalmodel
-      .find({
-        user: ObjectId(UserId),
-      })
-      .populate("user", "name");
+    const Goal = await Goals.find({
+      user: ObjectId(UserId),
+    }).populate("user", "name");
 
     return res.status(200).json({
-      Goals,
+      Goal,
     });
   } catch (error) {
     return res.json({
@@ -34,12 +32,12 @@ const CreateGoal = async (req, res) => {
         message: "UserId is Required",
       });
 
-    const goals = await goalmodel.find({ user: ObjectId(userId) });
+    const goals = await Goals.find({ user: ObjectId(userId) });
     if (goals.length > 2)
       return res.json({ message: "You can only have 2 goals at a time" });
-    const goal = await goalmodel.create(req.body);
+    const goal = await Goals.create(req.body);
 
-    await logsmodel.create({
+    await Logs.create({
       user: ObjectId(userId),
       model: "GOAL",
       action: "CREATE",
