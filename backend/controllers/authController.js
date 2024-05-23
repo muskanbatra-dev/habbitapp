@@ -66,10 +66,9 @@ const loginUser = async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          const tokenObj = { token: token };
-          const userobj = { ...user, ...tokenObj };
-          console.log(res.status(200).json(userobj));
-          return res.status(200).json(userobj);
+          tokenobj = { token: token };
+          data = { ...tokenobj, ...user };
+          return res.json({ data });
         }
       );
     }

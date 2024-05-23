@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const { Model, Schema } = mongoose;
 
-
 const taskSchema = Schema(
   {
     goalId: {
@@ -28,7 +27,7 @@ const taskSchema = Schema(
     },
     frequency_type: {
       type: String,
-      enum: ["DAILY", "WEEKLY"],
+      enum: ["DAILY", "WEEKLY", "MONTHLY"],
       required: true,
     },
     remainder: {
