@@ -18,7 +18,6 @@ app.use(cors());
 
 app.use("/", require("./routes/authRoutes"));
 app.use("/goals", require("./routes/goalRoutes"));
-app.use("/task", require("./routes/taskRoutes"));
 
 app.listen(port, () => {
   console.log(`example app listening on ${port}`);
