@@ -1,10 +1,10 @@
 const Goal = require("../models/goals");
-
 const getGoals = async (req, res) => {
   try {
     const { userId } = req.params;
 
     const goals = await Goal.findById(userId);
+
     res.status(200).json(goals);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -37,6 +37,8 @@ const createGoal = async (req, res) => {
       tasks,
     });
 
+    if (newGoal.length > 2)
+      return res.json({ message: "You can only have 2 goals at a time" });
     const savedGoal = await newGoal.save();
     res.status(201).json(savedGoal);
   } catch (err) {
