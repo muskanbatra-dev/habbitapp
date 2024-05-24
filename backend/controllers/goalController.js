@@ -4,7 +4,7 @@ const getGoals = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const goals = await Goal.find({ user_id: userId });
+    const goals = await Goal.findById(userId);
     res.status(200).json(goals);
   } catch (err) {
     res.status(500).json({ error: err.message });
