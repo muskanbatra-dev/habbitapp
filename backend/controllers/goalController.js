@@ -38,7 +38,7 @@ const createGoal = async (req, res) => {
     });
 
     if (newGoal.length > 2)
-      return res.json({ message: "You can only have 2 goals at a time" });
+      return res.json({ error: "You can only have 2 goals at a time" });
     const savedGoal = await newGoal.save();
     res.status(201).json(savedGoal);
   } catch (err) {
