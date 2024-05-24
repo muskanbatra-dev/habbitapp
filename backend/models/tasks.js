@@ -1,44 +1,31 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const tasksSchema = Schema(
+const taskSchema = new Schema(
   {
-    goalId: {
-      type: mongoose.Schema.ObjectId,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
-      trim: true,
-    },
-    quantity: {
-      type: Number,
-      required: true,
-    },
+    task_id: { type: Schema.Types.ObjectId, auto: true },
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    quantity: { type: Number, required: true },
     frequency: {
-      type: Number,
-      required: true,
+      type: {
+        type: String,
+        enum: ["daily", "weekly", "custom"],
+        required: true,
+      },
+      times_per_day: { type: Number }, // only applicable if frequency.type is 'daily'
+      days_of_week: { type: [String] }, // only applicable if frequency.type is 'custom'
+      days_per_week: { type: Number }, // only applicable if frequency.type is 'weekly'
     },
-    frequency_type: {
-      type: String,
-      enum: ["DAILY", "WEEKLY", "MONTHLY"],
-      required: true,
-    },
-    remainder: {
-      type: Boolean,
-      default: false,
+    reminders: {
+      enabled: { type: Boolean, default: false },
+      times: { type: [String] }, // manual reminders set by the user
+      auto_suggestions: { type: [String] }, // automatically suggested reminder times
     },
   },
-  {
-    timestamps: true,
-  }
+  { _id: false }
 );
 
-const TasksModel = mongoose.model("Task", tasksSchema);
+const Task = mongoose.model("Task", taskSchema);
 
-module.exports = TasksModel;
+module.exports = Task;

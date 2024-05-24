@@ -1,11 +1,10 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-const { GetGoals, CreateGoal } = require('../controllers/goalController')
+const { getGoals, createGoal } = require("../controllers/goalController");
 
-router.get('/:userId', GetGoals)
-router.post('/create', CreateGoal)
+router.get("/:userId", getGoals);
+router.post("/creategoal", createGoal);
 
-module.exports = router
-
+module.exports = router;

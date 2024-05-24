@@ -1,59 +1,50 @@
-const Goals = require("../models/goals");
-const { ObjectId } = require("mongodb");
-const Logs = require("../models/logs");
+const Goal = require("../models/goals");
 
-const GetGoals = async (req, res) => {
+const getGoals = async (req, res) => {
   try {
-    const UserId = req.parms;
-    if (!UserId)
-      return res.json({
-        message: "UserId is Required",
-      });
+    const { userId } = req.params;
 
-    const Goal = await Goals.find({
-      user: ObjectId(UserId),
-    }).populate("user", "name");
-
-    return res.status(200).json({
-      Goal,
-    });
-  } catch (error) {
-    return res.json({
-      message: error.message,
-    });
+    const goals = await Goal.find({ user_id: userId });
+    res.status(200).json(goals);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
-const CreateGoal = async (req, res) => {
+const createGoal = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const {
+      userId,
+      title,
+      description,
+      minTimeline,
+      maxTimeline,
+      userTimeline,
+      tasks,
+    } = req.body;
     if (!userId)
       return res.json({
         message: "UserId is Required",
       });
 
-    const goals = await Goals.find({ user: ObjectId(userId) });
-    if (goals.length > 2)
-      return res.json({ message: "You can only have 2 goals at a time" });
-    const goal = await Goals.create(req.body);
+    const newGoal = new Goal({
+      user_id: userId,
+      title,
+      description,
+      min_timeline: minTimeline,
+      max_timeline: maxTimeline,
+      user_timeline: userTimeline,
+      tasks,
+    });
 
-    await Logs.create({
-      user: ObjectId(userId),
-      model: "GOAL",
-      action: "CREATE",
-      data: goal,
-    });
-    return res.status(200).json({
-      message: "Goal Created Successfully",
-    });
-  } catch (error) {
-    return res.json({
-      message: error.message,
-    });
+    const savedGoal = await newGoal.save();
+    res.status(201).json(savedGoal);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
 module.exports = {
-  GetGoals,
-  CreateGoal,
+  getGoals,
+  createGoal,
 };
